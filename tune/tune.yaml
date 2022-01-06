@@ -1,0 +1,57 @@
+apiVersion: kubeflow.org/v1beta1
+kind: Experiment
+metadata:
+  namespace: kubeflow-user-example-com
+  name: grid-hp-tuning
+spec:
+  objective:
+    type: minimize
+    goal: 0.001
+    objectiveMetricName: loss
+    additionalMetricNames:
+      - val_loss
+  algorithm:
+    algorithmName: grid
+  parallelTrialCount: 3
+  maxTrialCount: 10
+  maxFailedTrialCount: 3
+  parameters:
+    - name: lr
+      parameterType: double
+      feasibleSpace:
+        min: "0.001"
+        max: "0.01"
+        step: "0.001"
+    - name: batchsize
+      parameterType: int
+      feasibleSpace:
+        min: "64"
+        max: "256"
+        step: "64"
+  trialTemplate:
+    primaryContainerName: training-container
+    trialParameters:
+      - name: learningRate
+        description: Learning rate for the training model
+        reference: lr
+      - name: batchSize
+        description: Batch size
+        reference: batchsize
+    trialSpec:
+      apiVersion: batch/v1
+      kind: Job
+      spec:
+        template:
+          metadata:
+            annotations:
+              sidecar.istio.io/inject: "false"
+          spec:
+            containers:
+              - name: training-container
+                image: johnugeorge/anomalytune:0.6
+                command:
+                  - "python"
+                  - "/opt/anomalytune.py"
+                  - "--lr=${trialParameters.learningRate}"
+                  - "--batchsize=${trialParameters.batchSize}"
+            restartPolicy: Never
