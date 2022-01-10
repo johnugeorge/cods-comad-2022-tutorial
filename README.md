@@ -1,7 +1,7 @@
 # CODS-COMAD 2022 Tutorial
 ## End-to-end Machine Learning using Kubeflow
       
-   In this tutorial, attendees will learn about the basic components of an end-to-end ML system including model training, hyperparameter tuning, and model deployment. The tutorial will be based on Kubeflow, a widely used open-source machine learning toolkit for Kubernetes.
+   In this tutorial, attendees will learn about the basic components of an end-to-end ML system including model training, hyperparameter tuning, and model deployment. The tutorial will be based on Kubeflow, a widely used open-source machine learning toolkit for Kubernetes. In this tutorial, standard autoencoder based [Keras anomaly detection](https://keras.io/examples/timeseries/timeseries_anomaly_detection/) model is used. 
 
 ## Model training using Training operator
 
